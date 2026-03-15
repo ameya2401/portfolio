@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import CursorCat from "@/components/CursorCat";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${inter.variable} antialiased font-sans`}
       >
         {children}
+        <CursorCat />
       </body>
     </html>
   );

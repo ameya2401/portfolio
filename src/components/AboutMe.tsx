@@ -134,22 +134,30 @@ export default function AboutMe({ about }: AboutMeProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: MOTION_DURATION.medium, ease: MOTION_EASE_OUT }}
-                        className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6"
+                        className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5 lg:col-span-2"
                     >
-                        <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                            Tools I Use
+                        <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <span className="w-2 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+                            Toolkit
                         </h4>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                             {tools.map((tool) => (
                                 <motion.div
                                     key={tool.name}
-                                    whileHover={{ scale: 1.1, rotate: 5 }}
+                                    whileHover={{ x: 4, scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className={`w-14 h-14 ${tool.gradientClass} rounded-2xl flex items-center justify-center shadow-md cursor-pointer`}
+                                    className="flex items-center gap-2 p-2 bg-gray-50/50 rounded-xl border border-gray-100/80 hover:border-blue-200 hover:bg-white hover:shadow-sm transition-all duration-300 group/tool"
                                 >
-                                    <span className="text-white font-bold text-xs">
-                                        {tool.name.charAt(0)}
-                                    </span>
+                                    <div className={`w-8 h-8 shadow-inner shrink-0 ${tool.gradientClass} rounded-lg flex items-center justify-center group-hover/tool:rotate-6 transition-transform`}>
+                                        <span className="text-white font-bold text-base">
+                                            {tool.name.charAt(0)}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="text-[13px] font-bold text-gray-800 truncate leading-tight">
+                                            {tool.name}
+                                        </span>
+                                    </div>
                                 </motion.div>
                             ))}
                         </div>
@@ -161,12 +169,12 @@ export default function AboutMe({ about }: AboutMeProps) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: MOTION_DURATION.medium, delay: MOTION_STAGGER.tight, ease: MOTION_EASE_OUT }}
-                        className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 md:col-span-1 lg:col-span-2"
+                        className="bg-white rounded-3xl border border-gray-100 shadow-sm p-5 lg:col-span-1"
                     >
                         <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-                            Interests
+                            Focus Areas
                         </h4>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             {interests.map((item) => (
                                 <motion.div
                                     key={item.title}

@@ -65,6 +65,11 @@ export interface WorkProject {
     title: string;
     description: string;
     imagePath?: string;
+    logoPath?: string;
+    repoUrl?: string;
+    liveUrl?: string;
+    isOngoing?: boolean;
+    hidePreview?: boolean;
     gradientKey: GradientKey;
     sortOrder: number;
     isPublished: boolean;

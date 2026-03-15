@@ -164,3 +164,30 @@ html.dark footer {
 html.dark footer path[fill="white"] {
   fill: #050505;
 }
+
+.cursor-cat-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+}
+
+@media (pointer: coarse) {
+  .cursor-cat-layer {
+    display: none;
+  }
+}
+
+.cursor-cat {
+  position: absolute;
+  will-change: transform;
+}
+
+.cursor-cat-image {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  user-select: none;
+  -webkit-user-drag: none;
+}

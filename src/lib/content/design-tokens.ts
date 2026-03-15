@@ -56,3 +56,4 @@ export const accentClassOptions = [
     "bg-cyan-500",
     "bg-orange-500",
 ];
+
