@@ -1,32 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
-import { Home, Briefcase, User, FileText } from "lucide-react";
-import { Linkedin, Twitter, Send, Github, Mail } from "lucide-react";
 import type {
     NavItem,
-    NavIconKey,
-    SocialIconKey,
     SocialLink,
 } from "@/lib/content/types";
-import DarkModeToggle from "./DarkModeToggle";
-
-const navIconMap: Record<NavIconKey, typeof Home> = {
-    home: Home,
-    work: Briefcase,
-    about: User,
-    resume: FileText,
-};
-
-const socialIconMap: Record<SocialIconKey, typeof Linkedin> = {
-    linkedin: Linkedin,
-    twitter: Twitter,
-    behance: Send,
-    github: Github,
-    email: Mail,
-};
+import SocialIcon from "@/components/SocialIcon";
 
 type NavbarProps = {
     navItems: NavItem[];
@@ -34,13 +13,14 @@ type NavbarProps = {
 };
 
 export default function Navbar({ navItems, socialLinks }: NavbarProps) {
-    const [scrolled, setScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState("home");
+    const resumeItem = navItems.find((item) => item.iconKey === "resume" && item.isActive);
+    const primaryNavItems = navItems.filter(
+        (item) => item.isActive && item.iconKey !== "resume",
+    );
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-
             const sections = ["home", "work", "about", "resume"];
             for (const section of sections) {
                 const el = document.getElementById(section);
@@ -59,107 +39,65 @@ export default function Navbar({ navItems, socialLinks }: NavbarProps) {
     }, []);
 
     return (
-        <>
-            {/* Logo */}
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                className="fixed top-6 left-6 z-50"
-            >
-                <motion.div
-                    whileHover={{ scale: 1.14, y: -2 }}
-                    transition={{ type: "spring", stiffness: 320, damping: 18 }}
-                    className="w-14 h-14 rounded-xl overflow-hidden cursor-pointer shadow-md"
-                >
-                    <Image
-                        src="/logo.png"
-                        alt="Ameya Bhagat logo"
-                        width={56}
-                        height={56}
-                        priority
-                        className="w-full h-full object-cover"
-                    />
-                </motion.div>
-            </motion.div>
+        <header className="fixed inset-x-0 top-0 z-40 border-b border-white/15 bg-black/95 backdrop-blur">
+            <nav className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 py-4 md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-6 md:px-8 md:py-5">
+                <a href="#home" className="text-sm font-semibold tracking-[0.18em]">
+                    AMEYA BHAGAT
+                </a>
 
-            {/* Center Navigation */}
-            <motion.nav
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${scrolled ? "glass shadow-lg" : "bg-white shadow-md"
-                    } rounded-full px-2 py-2`}
-            >
-                <div className="flex items-center gap-1">
-                    {navItems
-                        .filter((item) => item.isActive)
-                        .map((item) => {
-                            const Icon = navIconMap[item.iconKey] ?? Home;
-                            const isActive =
-                                activeSection === item.href.replace("#", "");
-                            return (
-                                <a
-                                    key={item.label}
-                                    href={item.href}
-                                    className={`relative p-3 rounded-full transition-all duration-200 group ${isActive
-                                        ? "bg-black text-white"
-                                        : "text-gray-500 hover:text-black hover:bg-gray-100"
-                                        }`}
-                                    aria-label={item.label}
-                                >
-                                    <Icon size={20} strokeWidth={1.8} />
-                                    <AnimatePresence>
-                                        {!isActive && (
-                                            <motion.span
-                                                initial={{ opacity: 0, y: 5 }}
-                                                whileHover={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0 }}
-                                                className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs font-medium bg-black text-white px-2 py-1 rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                                            >
-                                                {item.label}
-                                            </motion.span>
-                                        )}
-                                    </AnimatePresence>
-                                </a>
-                            );
-                        })}
-                </div>
-            </motion.nav>
-
-            {/* Social Links */}
-            <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="fixed top-6 right-24 z-50 hidden md:flex items-center gap-1 bg-white shadow-md rounded-full px-2 py-2"
-            >
-                {socialLinks
-                    .filter(
-                        (item) =>
-                            item.isActive &&
-                            (item.placement === "navbar" || item.placement === "both"),
-                    )
-                    .map((item) => {
-                        const Icon = socialIconMap[item.iconKey] ?? Linkedin;
+                <div className="order-3 flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar md:order-2 md:justify-center md:pb-0">
+                    {primaryNavItems.map((item) => {
+                        const isActive =
+                            activeSection === item.href.replace("#", "");
                         return (
                             <a
                                 key={item.label}
                                 href={item.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-3 rounded-full text-gray-500 hover:text-black hover:bg-gray-100 transition-all duration-200"
-                                aria-label={item.label}
+                                className={`rounded-md border px-4 py-2 text-sm whitespace-nowrap transition-all duration-200 hover:-translate-y-0.5 ${isActive
+                                    ? "border-white bg-white text-black"
+                                    : "border-white/25 text-white hover:border-white/50 hover:bg-white/10"
+                                    }`}
                             >
-                                <Icon size={20} strokeWidth={1.8} />
+                                {item.label}
                             </a>
                         );
                     })}
-            </motion.div>
+                </div>
 
-            <div className="fixed top-6 right-6 z-50">
-                <DarkModeToggle />
-            </div>
-        </>
+                <div className="order-2 flex items-center gap-2 text-sm text-gray-300 md:order-3 md:justify-end">
+                    {resumeItem && (
+                        <a
+                            href={resumeItem.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center rounded-md border border-white bg-white px-3.5 py-1.5 text-xs font-semibold tracking-[0.12em] text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-transparent hover:text-white"
+                        >
+                            RESUME
+                        </a>
+                    )}
+                    {socialLinks
+                        .filter(
+                            (item) =>
+                                item.isActive &&
+                                (item.placement === "navbar" || item.placement === "both"),
+                        )
+                        .map((item) => {
+                            const label = item.label.toUpperCase();
+                            return (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 rounded-md border border-white/20 px-2.5 py-1.5 text-xs tracking-wide transition-all duration-200 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/10 hover:text-white"
+                                >
+                                    <SocialIcon iconKey={item.iconKey} className="h-3.5 w-3.5" />
+                                    {label}
+                                </a>
+                            );
+                        })}
+                </div>
+            </nav>
+        </header>
     );
 }

@@ -1,70 +1,30 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Camera } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import type { Destination } from "@/lib/content/types";
-import { gradientClassMap } from "@/lib/content/design-tokens";
+
 type PhotographyProps = {
     destinations: Destination[];
 };
 
 export default function Photography({ destinations }: PhotographyProps) {
-    // Double the array for seamless infinite scroll
     const publishedDestinations = destinations.filter((dest) => dest.isPublished);
-    const doubled = [...publishedDestinations, ...publishedDestinations];
 
     return (
-        <section className="py-20 overflow-hidden">
-            <div className="px-6">
-                <SectionHeading
-                    icon={<Camera size={28} />}
-                    title="Core Strengths"
-                />
-            </div>
+        <section className="border-b border-white/15 px-6 py-16">
+            <div className="mx-auto max-w-6xl">
+                <SectionHeading title="Core Strengths" />
 
-            {/* Infinite Scrolling Gallery */}
-            <div className="relative mt-8">
-                <div className="animate-scroll-gallery flex gap-5 w-max">
-                    {doubled.map((dest, i) => (
-                        <motion.div
-                            key={`${dest.name}-${i}`}
-                            whileHover={{ y: -12, rotate: 0, scale: 1.05 }}
-                            className="shrink-0 w-48 sm:w-56 group cursor-pointer"
-                            style={{
-                                transform: `rotate(${i % 2 === 0 ? -2 : 2}deg)`,
-                            }}
+                <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3 md:grid-cols-4">
+                    {publishedDestinations.map((dest) => (
+                        <li
+                            key={dest.name}
+                            className="rounded-lg border border-white/15 bg-white/2 px-3 py-2 text-sm text-gray-200 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/3"
                         >
-                            <div
-                                className={`relative h-52 sm:h-64 bg-linear-to-br ${gradientClassMap[dest.gradientKey] ?? gradientClassMap["amber-orange"]} rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-500`}
-                            >
-                                {dest.imagePath ? (
-                                    <Image
-                                        src={dest.imagePath}
-                                        alt={dest.name}
-                                        fill
-                                        sizes="(min-width: 640px) 224px, 192px"
-                                        className="object-cover"
-                                    />
-                                ) : null}
-                                {/* Decorative content */}
-                                {!dest.imagePath ? (
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <span className="text-6xl opacity-40 group-hover:opacity-60 group-hover:scale-125 transition-all duration-500">
-                                            {dest.emoji}
-                                        </span>
-                                    </div>
-                                ) : null}
-                                {/* Overlay gradient */}
-                                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            </div>
-                            <p className="text-center mt-3 font-semibold text-gray-700 italic text-sm sm:text-base group-hover:text-black transition-colors">
-                                {dest.name}
-                            </p>
-                        </motion.div>
+                            {dest.name}
+                        </li>
                     ))}
-                </div>
+                </ul>
             </div>
         </section>
     );

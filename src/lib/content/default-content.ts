@@ -5,7 +5,7 @@ export const defaultPortfolioContent: PortfolioContent = {
         { label: "Home", href: "#home", iconKey: "home", sortOrder: 1, isActive: true },
         { label: "Work", href: "#work", iconKey: "work", sortOrder: 2, isActive: true },
         { label: "About", href: "#about", iconKey: "about", sortOrder: 3, isActive: true },
-        { label: "Resume", href: "#resume", iconKey: "resume", sortOrder: 4, isActive: true },
+        { label: "Resume", href: "/AmeyaBhagat_Resume2026.pdf", iconKey: "resume", sortOrder: 4, isActive: true },
     ],
     socialLinks: [
         {

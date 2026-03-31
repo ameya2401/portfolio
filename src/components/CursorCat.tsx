@@ -1,4 +1,4 @@
-"use client";
+    "use client";
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useRef } from "react";
@@ -11,7 +11,7 @@ const TICK_RATE = 50;
 const TICK_MS = 1000 / TICK_RATE;
 const STEP_DIAGONAL = SPEED / Math.SQRT2;
 const ASSET_BASE = "/neko";
-const SOUND_VOLUME = 0.3;
+
 
 type BaseSprite =
     | "up"
@@ -56,15 +56,8 @@ const SPRITE_KEYS: ReadonlyArray<string> = [
     "sleep2",
 ];
 
-const SOUND_KEYS = ["awake", "idle3", "sleep"] as const;
-type SoundKey = (typeof SOUND_KEYS)[number];
-
 function toSpriteSrc(name: string) {
     return `${ASSET_BASE}/${name}.png`;
-}
-
-function toSoundSrc(name: SoundKey) {
-    return `${ASSET_BASE}/${name}.wav`;
 }
 
 function normalizeAngleDegrees(angleRadians: number) {
@@ -87,26 +80,6 @@ export default function CursorCat() {
         }
 
         const pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-        const sounds = new Map<SoundKey, HTMLAudioElement>();
-
-        for (const soundName of SOUND_KEYS) {
-            const sound = new Audio(toSoundSrc(soundName));
-            sound.preload = "auto";
-            sound.volume = SOUND_VOLUME;
-            sounds.set(soundName, sound);
-        }
-
-        const playSound = (soundName: SoundKey) => {
-            const sound = sounds.get(soundName);
-            if (!sound) {
-                return;
-            }
-
-            sound.currentTime = 0;
-            void sound.play().catch(() => {
-                // Browsers can block autoplay until user interaction.
-            });
-        };
 
         const cat = {
             x: window.innerWidth / 2,
@@ -146,7 +119,7 @@ export default function CursorCat() {
                 cat.lastSprite = frameSprite;
             }
 
-            container.style.transform = `translate3d(${cat.x}px, ${cat.y}px, 0)`;
+            container.style.transform = `translate3d(${Math.round(cat.x)}px, ${Math.round(cat.y)}px, 0)`;
         };
 
         const stayIdle = () => {
@@ -188,44 +161,79 @@ export default function CursorCat() {
             cat.max = 16;
 
             const angle = normalizeAngleDegrees(Math.atan2(dy, dx));
+            const HYSTERESIS = 10;
+            let newBaseSprite = cat.baseSprite;
 
-            if (angle <= 292.5 && angle > 247.5) {
-                cat.y -= SPEED;
-                cat.baseSprite = "up";
-            } else if (angle <= 337.5 && angle > 292.5) {
-                cat.x += STEP_DIAGONAL;
-                cat.y -= STEP_DIAGONAL;
-                cat.baseSprite = "upright";
-            } else if (angle <= 22.5 || angle > 337.5) {
-                cat.x += SPEED;
-                cat.baseSprite = "right";
-            } else if (angle <= 67.5 && angle > 22.5) {
-                cat.x += STEP_DIAGONAL;
-                cat.y += STEP_DIAGONAL;
-                cat.baseSprite = "downright";
-            } else if (angle <= 112.5 && angle > 67.5) {
-                cat.y += SPEED;
-                cat.baseSprite = "down";
-            } else if (angle <= 157.5 && angle > 112.5) {
-                cat.x -= STEP_DIAGONAL;
-                cat.y += STEP_DIAGONAL;
-                cat.baseSprite = "downleft";
-            } else if (angle <= 202.5 && angle > 157.5) {
-                cat.x -= SPEED;
-                cat.baseSprite = "left";
+            const DIRECTIONS: { name: BaseSprite; angle: number }[] = [
+                { name: "right", angle: 0 },
+                { name: "downright", angle: 45 },
+                { name: "down", angle: 90 },
+                { name: "downleft", angle: 135 },
+                { name: "left", angle: 180 },
+                { name: "upleft", angle: 225 },
+                { name: "up", angle: 270 },
+                { name: "upright", angle: 315 },
+            ];
+
+            // Determine direction with hysteresis
+            const currentDirData = DIRECTIONS.find((d) => d.name === cat.baseSprite);
+            let targetDir = DIRECTIONS[0];
+
+            if (currentDirData) {
+                let diff = Math.abs(angle - currentDirData.angle);
+                if (diff > 180) diff = 360 - diff;
+
+                if (diff <= 22.5 + HYSTERESIS) {
+                    targetDir = currentDirData;
+                } else {
+                    targetDir = DIRECTIONS.reduce((prev, curr) => {
+                        let diffCurr = Math.abs(angle - curr.angle);
+                        if (diffCurr > 180) diffCurr = 360 - diffCurr;
+                        let diffPrev = Math.abs(angle - prev.angle);
+                        if (diffPrev > 180) diffPrev = 360 - diffPrev;
+                        return diffCurr < diffPrev ? curr : prev;
+                    });
+                }
             } else {
+                targetDir = DIRECTIONS.reduce((prev, curr) => {
+                    let diffCurr = Math.abs(angle - curr.angle);
+                    if (diffCurr > 180) diffCurr = 360 - diffCurr;
+                    let diffPrev = Math.abs(angle - prev.angle);
+                    if (diffPrev > 180) diffPrev = 360 - diffPrev;
+                    return diffCurr < diffPrev ? curr : prev;
+                });
+            }
+
+            newBaseSprite = targetDir.name;
+            cat.baseSprite = newBaseSprite;
+
+            // Move the cat
+            if (newBaseSprite === "up") {
+                cat.y -= SPEED;
+            } else if (newBaseSprite === "upright") {
+                cat.x += STEP_DIAGONAL;
+                cat.y -= STEP_DIAGONAL;
+            } else if (newBaseSprite === "right") {
+                cat.x += SPEED;
+            } else if (newBaseSprite === "downright") {
+                cat.x += STEP_DIAGONAL;
+                cat.y += STEP_DIAGONAL;
+            } else if (newBaseSprite === "down") {
+                cat.y += SPEED;
+            } else if (newBaseSprite === "downleft") {
+                cat.x -= STEP_DIAGONAL;
+                cat.y += STEP_DIAGONAL;
+            } else if (newBaseSprite === "left") {
+                cat.x -= SPEED;
+            } else if (newBaseSprite === "upleft") {
                 cat.x -= STEP_DIAGONAL;
                 cat.y -= STEP_DIAGONAL;
-                cat.baseSprite = "upleft";
             }
         };
 
         const tick = () => {
             cat.count += 1;
 
-            if (cat.state === 10 && cat.count === cat.min) {
-                playSound("idle3");
-            }
 
             const maxX = Math.max(0, window.innerWidth - SPRITE_WIDTH * SCALE);
             const maxY = Math.max(0, window.innerHeight - SPRITE_HEIGHT * SCALE);
@@ -243,9 +251,6 @@ export default function CursorCat() {
                     clickQueued = false;
                 }
             } else {
-                if (cat.state >= 13) {
-                    playSound("awake");
-                }
                 catchCursor(dx, dy);
             }
 
@@ -253,9 +258,6 @@ export default function CursorCat() {
                 cat.count = 0;
                 if (cat.state > 0) {
                     cat.state += 1;
-                    if (cat.state === 13) {
-                        playSound("sleep");
-                    }
                 }
             }
 
