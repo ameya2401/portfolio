@@ -1,0 +1,75 @@
+/* List and grid views for projects, with a sliding toggle. */
+.root{position:relative}
+.bar{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.head{flex:1;min-width:0}
+.head > *{margin-bottom:0!important}
+.toggle{position:relative;flex:none;display:flex;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.thumb{position:absolute;top:3px;left:3px;width:30px;height:28px;border-radius:7px;background:var(--raised);box-shadow:0 1px 2px #0000001a,0 0 0 1px var(--line);transition:transform 320ms var(--ease)}
+.toggle[data-view=grid] .thumb{transform:translateX(30px)}
+.toggle button{position:relative;display:grid;place-items:center;width:30px;height:28px;padding:0;border:0;background:none;color:var(--muted)!important;transition:color 160ms ease}
+.toggle button[aria-checked=true]{color:var(--ink)!important}
+
+.list,.grid{list-style:none;margin:0;padding:0}
+.list{border-top:1px solid var(--line)}
+.list li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:16px 0;border-bottom:1px solid var(--line);transition:opacity 220ms ease}
+.rowMain{display:flex;align-items:center;gap:10px;min-width:0}
+.name{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:550;letter-spacing:-.015em;color:var(--ink)}
+.name img{border-radius:4px;object-fit:contain;flex:none}
+.noLogo{width:18px;height:18px;border-radius:4px;background:var(--surface);flex:none}
+.status{display:inline-flex;align-items:center;gap:6px;font:400 12px/1 var(--label);color:var(--muted);white-space:nowrap}
+.status i{width:6px;height:6px;border-radius:50%;background:#2ca64b}
+.list p{grid-column:1/-1;margin:0!important;font-size:14px;line-height:1.65;color:var(--muted)}
+.rowLinks{grid-column:2;grid-row:1;display:flex;gap:14px;font:400 12.5px/1 var(--label);color:var(--muted)}
+.rowLinks a{display:inline-flex;align-items:center;gap:4px;transition:color 150ms ease}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 20px}
+.card{display:flex;flex-direction:column;gap:8px;min-width:0}
+.shot{position:relative;display:block;aspect-ratio:1.6;overflow:hidden;margin-bottom:6px;border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:0 1px 2px #0000000a}
+.shot img{object-fit:cover;object-position:top;transition:transform 700ms var(--ease)}
+.shotEmpty{position:absolute;inset:0;display:grid;place-items:center;font-size:20px;font-weight:550;color:var(--muted)}
+.cardHead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.icons{display:flex;gap:2px}
+.icons a{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;color:var(--muted);transition:color 150ms ease,background 150ms ease}
+.card .status{align-self:flex-start}
+.card p{margin:0!important;font-size:13.5px;line-height:1.6;color:var(--muted)}
+
+.proof{grid-column:1/-1;justify-self:start;display:inline-flex;align-items:center;gap:4px;margin-top:2px;font:500 12.5px/1.4 var(--label);font-variant-numeric:tabular-nums;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.card .proof{align-self:flex-start}
+
+/* Switching views: items settle in one after another. */
+.list[data-animate] li,.grid[data-animate] li{animation:itemIn 440ms var(--ease) both;animation-delay:calc(var(--i) * 45ms)}
+@keyframes itemIn{from{opacity:0;filter:blur(4px);transform:translateY(8px)}to{opacity:1;filter:none;transform:none}}
+
+@media (hover:hover) and (pointer:fine){
+ .list:hover li:not(:hover){opacity:.45}
+ .rowLinks a:hover,.icons a:hover{color:var(--ink)}
+ .proof:hover{text-decoration-color:var(--ink)}
+ .icons a:hover{background:var(--surface)}
+ .icons a[data-brand="github"]:hover{
+  color: #181717 !important;
+  background: transparent !important;
+  filter: drop-shadow(0 0 5px rgba(24, 23, 23, 0.45));
+  transform: scale(1.12);
+ }
+ :global(.dark) .icons a[data-brand="github"]:hover{
+  color: #ffffff !important;
+  background: transparent !important;
+  filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.75));
+  transform: scale(1.12);
+ }
+ .rowLinks a[data-brand="github"]:hover{
+  color: #181717 !important;
+ }
+ :global(.dark) .rowLinks a[data-brand="github"]:hover{
+  color: #ffffff !important;
+ }
+ .name:hover span{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+ .shot:hover img{transform:scale(1.025)}
+ .toggle button:hover{color:var(--ink)!important}
+}
+@media (max-width:640px){
+ .grid{grid-template-columns:1fr;gap:28px}
+ .list li{grid-template-columns:1fr}
+ .rowLinks{grid-column:1;grid-row:auto;margin-top:6px}
+}
+@media (prefers-reduced-motion:reduce){.thumb,.shot img{transition:none}.list[data-animate] li,.grid[data-animate] li{animation:none}}

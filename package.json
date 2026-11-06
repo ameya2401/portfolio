@@ -1,0 +1,50 @@
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "predev": "node scripts/sync-kumo-styles.mjs",
+    "prebuild": "node scripts/sync-kumo-styles.mjs"
+  },
+  "dependencies": {
+    "@cloudflare/kumo": "^2.14.0",
+    "@emailjs/browser": "^4.4.1",
+    "@keystatic/core": "^0.5.49",
+    "@keystatic/next": "^5.0.4",
+    "@paper-design/shaders-react": "^0.0.77",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-toast": "^1.2.15",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "@vercel/analytics": "^2.0.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^0.378.0",
+    "motion": "^12.40.0",
+    "next": "14.2.35",
+    "next-themes": "^0.4.6",
+    "react": "^18",
+    "react-activity-calendar": "^3.1.1",
+    "react-dom": "^18",
+    "react-fast-marquee": "^1.6.5",
+    "react-github-calendar": "^5.0.5",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

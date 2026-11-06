@@ -1,0 +1,125 @@
+/* The canvas: a framed column with crosshair marks where section rules meet the rails. */
+.canvas{--accent:#e8552a;--accent-soft:color-mix(in srgb,var(--accent) 8%,transparent);--label:var(--font-manrope),var(--font-portfolio),sans-serif;--gutter:40px;--frame:768px;--cols:12;--gap:16px;
+ background-color:color-mix(in srgb,var(--paper) 96%,var(--ink))}
+:global(.dark) .canvas{--accent:#ff6f43}
+.canvas ::selection{background:color-mix(in srgb,var(--accent) 22%,transparent)}
+.canvas :is(a,button,input,summary):focus-visible{outline-color:var(--accent)}
+
+.frame{position:relative;width:min(var(--frame),100%);margin-inline:auto;min-height:100svh;display:flex;flex-direction:column;background:var(--paper);border-inline:1px solid var(--line)}
+.frame > main{flex:1;padding-inline:var(--gutter);outline:none}
+.frame > main > section,.footer{scroll-margin-top:60px}
+
+.header{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:16px;height:60px;padding-inline:calc(var(--gutter) - 8px);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 82%,transparent);-webkit-backdrop-filter:blur(12px) saturate(1.4);backdrop-filter:blur(12px) saturate(1.4);font-size:13.5px;line-height:1.4}
+.mark{display:inline-flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;font-weight:550;letter-spacing:-.02em;white-space:nowrap;transition:background 150ms ease}
+.mark img{width:24px;height:24px;border-radius:6px;object-fit:cover;transition:transform 240ms var(--ease)}
+.nav{display:flex;gap:2px;color:var(--muted)}
+.nav a{padding:6px 9px;border-radius:7px;transition:color 150ms ease,background 150ms ease}
+.nav a[aria-current=page]{color:var(--ink);background:var(--surface)}
+.tools{margin-left:auto;display:flex;align-items:center;gap:2px}
+.iconButton{display:grid;place-items:center;width:34px;height:34px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--muted)!important;transition:color 150ms ease,background 150ms ease,transform 140ms var(--ease)}
+.iconButton:active{transform:scale(.94)}
+.iconButton[aria-pressed=true]{color:var(--accent)!important;background:var(--accent-soft)}
+.social{background:transparent!important;transition:color 180ms ease,filter 180ms ease,transform 180ms var(--ease)!important}
+.social svg{overflow:visible;transition:filter 180ms ease,transform 180ms var(--ease)}
+.divider{width:1px;height:16px;background:var(--line);margin-inline:6px}
+
+.footer{position:relative;border-top:1px solid var(--line)}
+
+.footer{padding:48px var(--gutter) 28px}
+.footerIndex{font:400 12px/1 var(--label);font-variant-numeric:tabular-nums;color:var(--muted);letter-spacing:.02em;margin:0 0 14px!important}
+.footer h2{font-size:clamp(26px,4.4vw,32px)!important;font-weight:600!important;letter-spacing:-.035em!important;line-height:1.1!important;margin:0 0 10px!important}
+.footerInvitation{font-size:15px;line-height:1.65;color:var(--muted);margin:0 0 14px!important;max-width:620px}
+.footerZone{margin:6px 0 24px!important;font:400 12.5px/1.5 var(--label);color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.emailGroup{display:inline-flex;align-items:center;gap:4px}
+.actions > a:not([data-button]):not([class*="rounded"]),.emailGroup > a{display:inline-flex;align-items:center;gap:5px;font-size:15px;font-weight:500;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.footerLinks{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin-top:40px;padding-top:18px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted)}
+.footerLinks > a:last-child{margin-left:auto}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-top:8px;font:400 12px/1.5 var(--label);color:var(--muted)}
+.visitors{display:inline-flex;align-items:center;gap:7px;margin:0!important;font:400 12px/1.5 var(--label);font-variant-numeric:tabular-nums;color:var(--muted)}
+.visitors i{width:6px;height:6px;border-radius:50%;background:#2ca64b}
+.colophon{margin:14px 0 0!important;font:400 12px/1.7 var(--label);font-variant-numeric:tabular-nums;color:var(--muted);letter-spacing:.01em}
+.colophon kbd{font:inherit;padding:1px 5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;color:var(--ink)}
+
+
+@media (hover:hover) and (pointer:fine){
+ .mark:hover{background:var(--surface)}
+ .mark:hover img{transform:rotate(-6deg)}
+ .nav a:hover{color:var(--ink)}
+ .iconButton:hover{color:var(--ink)!important;background:var(--surface)}
+ .social:hover{background:transparent!important}
+ .social[data-brand="github"]:hover{color:#181717!important;background:transparent!important;filter:drop-shadow(0 0 5px rgba(24,23,23,.45))!important;transform:scale(1.12)}
+ .social[data-brand="linkedin"]:hover{color:#0a66c2!important;background:transparent!important;filter:drop-shadow(0 0 6px rgba(10,102,194,.75)) drop-shadow(0 0 1px rgba(10,102,194,.9))!important;transform:scale(1.12)}
+ .social[data-brand="x"]:hover{color:#000000!important;background:transparent!important;filter:drop-shadow(0 0 5px rgba(0,0,0,.45))!important;transform:scale(1.12)}
+ :global(.dark) .social[data-brand="github"]:hover{color:#ffffff!important;background:transparent!important;filter:drop-shadow(0 0 7px rgba(255,255,255,.75)) drop-shadow(0 0 1px rgba(255,255,255,.95))!important;transform:scale(1.12)}
+ :global(.dark) .social[data-brand="linkedin"]:hover{color:#0a66c2!important;background:transparent!important;filter:drop-shadow(0 0 8px rgba(10,102,194,.85)) drop-shadow(0 0 2px rgba(10,102,194,1))!important;transform:scale(1.12)}
+ :global(.dark) .social[data-brand="x"]:hover{color:#ffffff!important;background:transparent!important;filter:drop-shadow(0 0 7px rgba(255,255,255,.75)) drop-shadow(0 0 1px rgba(255,255,255,.95))!important;transform:scale(1.12)}
+
+ .menuSocial a svg{transition:filter 180ms ease,transform 180ms var(--ease);overflow:visible}
+ .menuSocial a[data-brand="github"]:hover{color:#181717;border-color:color-mix(in srgb, #181717 35%, var(--line))}
+ .menuSocial a[data-brand="github"]:hover svg{filter:drop-shadow(0 0 5px rgba(24,23,23,.45));transform:scale(1.1)}
+ .menuSocial a[data-brand="linkedin"]:hover{color:#0a66c2;border-color:color-mix(in srgb, #0a66c2 45%, var(--line))}
+ .menuSocial a[data-brand="linkedin"]:hover svg{filter:drop-shadow(0 0 6px rgba(10,102,194,.75));transform:scale(1.1)}
+ .menuSocial a[data-brand="x"]:hover{color:#000000;border-color:color-mix(in srgb, #000000 35%, var(--line))}
+ .menuSocial a[data-brand="x"]:hover svg{filter:drop-shadow(0 0 5px rgba(0,0,0,.45));transform:scale(1.1)}
+ :global(.dark) .menuSocial a[data-brand="github"]:hover{color:#ffffff;border-color:rgba(255,255,255,.35)}
+ :global(.dark) .menuSocial a[data-brand="github"]:hover svg{filter:drop-shadow(0 0 7px rgba(255,255,255,.75));transform:scale(1.1)}
+ :global(.dark) .menuSocial a[data-brand="linkedin"]:hover{color:#0a66c2;border-color:rgba(10,102,194,.5)}
+ :global(.dark) .menuSocial a[data-brand="linkedin"]:hover svg{filter:drop-shadow(0 0 8px rgba(10,102,194,.85));transform:scale(1.1)}
+ :global(.dark) .menuSocial a[data-brand="x"]:hover{color:#ffffff;border-color:rgba(255,255,255,.35)}
+ :global(.dark) .menuSocial a[data-brand="x"]:hover svg{filter:drop-shadow(0 0 7px rgba(255,255,255,.75));transform:scale(1.1)}
+
+ .footerLinks a:hover{color:var(--ink)}
+ .footerLinks a[data-brand="github"]:hover{color:#181717!important}
+ .footerLinks a[data-brand="linkedin"]:hover{color:#0a66c2!important}
+ .footerLinks a[data-brand="x"]:hover{color:#000000!important}
+ .footerLinks a[data-brand="kaggle"]:hover{color:#20beff!important}
+ :global(.dark) .footerLinks a[data-brand="github"]:hover{color:#ffffff!important}
+ :global(.dark) .footerLinks a[data-brand="linkedin"]:hover{color:#0a66c2!important}
+ :global(.dark) .footerLinks a[data-brand="x"]:hover{color:#ffffff!important}
+ :global(.dark) .footerLinks a[data-brand="kaggle"]:hover{color:#20beff!important}
+}
+@media (max-width:640px){
+ .canvas{--gutter:20px;--cols:4;background-color:var(--paper)}
+ .frame{border-inline:0}
+ .header{gap:8px;padding-inline:12px}
+ .mark{padding:4px}
+ .mark span,.social,.divider,.nav{display:none}
+ .footer{padding-top:40px}
+}
+
+
+/* Phone menu: three lines that fold into a cross, and a panel that wipes open under the header. */
+.menuButton{display:none;place-content:center;gap:4px;width:38px;height:38px;margin-right:-4px;padding:0;border:0;border-radius:9px;background:transparent;color:var(--ink)}
+.menuButton span{display:block;width:18px;height:1.6px;border-radius:2px;background:currentColor;transition:transform 300ms var(--ease),opacity 200ms ease}
+.header[data-menu] .menuButton span:nth-child(1){transform:translateY(5.6px) rotate(45deg)}
+.header[data-menu] .menuButton span:nth-child(2){opacity:0;transform:scaleX(.4)}
+.header[data-menu] .menuButton span:nth-child(3){transform:translateY(-5.6px) rotate(-45deg)}
+.menu{display:none;position:absolute;left:0;right:0;top:100%;padding:8px 20px 22px;border-bottom:1px solid var(--line);background:var(--paper);box-shadow:0 24px 40px -28px #3f342066;clip-path:inset(0 0 100% 0);pointer-events:none;transition:clip-path 460ms var(--ease)}
+.header[data-menu] .menu{clip-path:inset(0 0 -40px 0);pointer-events:auto}
+.menu nav{display:flex;flex-direction:column}
+.menu nav a{padding:12px 0;border-bottom:1px solid var(--line);font-size:19px;font-weight:550;letter-spacing:-.02em;color:var(--ink)}
+.menu nav a[aria-current=page]{color:var(--muted)}
+.menu nav a,.menuSocial{opacity:0;transform:translateY(-8px);transition:opacity 260ms ease,transform 420ms var(--ease);transition-delay:0ms}
+.header[data-menu] .menu nav a,.header[data-menu] .menuSocial{opacity:1;transform:none;transition-delay:calc(60ms + var(--i) * 40ms)}
+.menuSocial{display:flex;gap:10px;margin-top:18px}
+.menuSocial a{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--raised);font-size:14px;font-weight:500;color:var(--ink)}
+.menuButton:active,.menuSocial a:active{transform:scale(.96)}
+.menuBackdrop{display:none;position:fixed;inset:0;z-index:35;background:color-mix(in srgb,var(--ink) 14%,transparent);opacity:0;pointer-events:none;transition:opacity 280ms ease}
+.menuBackdrop[data-open]{opacity:1;pointer-events:auto}
+@media (max-width:640px){.menuButton{display:grid}.menu,.menuBackdrop{display:block}}
+@media (prefers-reduced-motion:reduce){.menu,.menu nav a,.menuSocial,.menuButton span,.menuBackdrop{transition:none}}
+
+/* Motion: sections blur in softly as they scroll into view. */
+.canvas [data-reveal]{opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 600ms var(--ease),filter 600ms var(--ease),transform 700ms var(--ease)}
+.canvas [data-reveal][data-in]{opacity:1;filter:none;transform:none}
+@media (prefers-reduced-motion:reduce){.canvas [data-reveal]{opacity:1;filter:none;transform:none;transition:none}}
+
+
+/* Copy email: the icon swaps for a check for a moment, nothing more. */
+.copyButton{position:relative}
+.copyIcon,.checkIcon{position:absolute;inset:0;display:grid;place-items:center;transition:opacity 180ms ease,transform 260ms var(--ease),filter 200ms ease}
+.checkIcon{opacity:0;transform:scale(.6);filter:blur(2px);color:#2ca64b}
+.copyButton[data-state=done] .copyIcon{opacity:0;transform:scale(.6);filter:blur(2px)}
+.copyButton[data-state=done] .checkIcon{opacity:1;transform:none;filter:none}
+@media (prefers-reduced-motion:reduce){.copyIcon,.checkIcon{transition:none}}
